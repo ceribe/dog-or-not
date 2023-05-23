@@ -34,7 +34,7 @@ resource "azurerm_storage_account" "db_storage_account" {
   blob_properties {
     cors_rule {
       allowed_headers = ["*"]
-      allowed_methods = ["POST"]
+      allowed_methods = ["POST", "PUT"]
       allowed_origins = ["*"]
       exposed_headers = ["*"]
       max_age_in_seconds = 86400
@@ -45,7 +45,7 @@ resource "azurerm_storage_account" "db_storage_account" {
 data "azurerm_storage_account_sas" "db_storage_account_sas" {
   connection_string = azurerm_storage_account.db_storage_account.primary_connection_string
   https_only        = true
-  signed_version    = "2022-07-29"
+  signed_version    = "2017-11-09"
 
   resource_types {
     service   = true
@@ -79,6 +79,7 @@ data "azurerm_storage_account_sas" "db_storage_account_sas" {
 
 output "sas_url_query_string" {
   value = data.azurerm_storage_account_sas.db_storage_account_sas.sas
+  sensitive = true
 }
 
 # Table storing photo's names, references and status
