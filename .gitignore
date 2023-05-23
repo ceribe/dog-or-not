@@ -4,3 +4,9 @@ infra/terraform.tfstate
 infra/terraform.tfstate.backup
 infra/.terraform
 *.tfstate
+
+ui/.parcel-cache/
+
+ui/dist/
+
+ui/node_modules/
