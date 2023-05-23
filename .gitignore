@@ -1,0 +1,6 @@
+
+code/node_modules/
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/.terraform
+*.tfstate
