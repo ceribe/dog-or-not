@@ -31,6 +31,7 @@ resource "azurerm_storage_account" "db_storage_account" {
   location                 = azurerm_resource_group.resource_group.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  allow_nested_items_to_be_public = true
   blob_properties {
     cors_rule {
       allowed_headers = ["*"]
@@ -88,11 +89,11 @@ resource "azurerm_storage_table" "photo_info_table" {
   storage_account_name = azurerm_storage_account.db_storage_account.name
 }
 
-# Container used to store uploaded photos
+# Container used to store uploaded photos. write is private but read is public
 resource "azurerm_storage_container" "photos" {
   name                  = "photos"
   storage_account_name  = azurerm_storage_account.db_storage_account.name
-  container_access_type = "private"
+  container_access_type = "blob"
 }
 
 resource "azurerm_linux_function_app" "doggo-share-app" {
