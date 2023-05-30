@@ -4,8 +4,8 @@
       "name": "myBlob",
       "type": "blobTrigger",
       "direction": "in",
-      "path": "photos/upload/{name}",
-      "connection": ""
+      "path": "photos/{name}",
+      "connection": "CONNSTRING"
     }
   ]
 }

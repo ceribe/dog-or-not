@@ -3,12 +3,12 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "resource_group" {
-  name     = "dog-or-not-resource-group"
+  name     = "doggo-share-resource-group"
   location = "West Europe"
 }
 
 resource "azurerm_service_plan" "service_plan" {
-  name                = "dog-or-not-service-plan"
+  name                = "doggo-share-service-plan"
   resource_group_name = azurerm_resource_group.resource_group.name
   location            = azurerm_resource_group.resource_group.location
   os_type             = "Linux"
@@ -17,7 +17,7 @@ resource "azurerm_service_plan" "service_plan" {
 
 # Storage account used for storing uploaded functions
 resource "azurerm_storage_account" "code_storage_account" {
-  name                     = "dogornotcodesa"
+  name                     = "doggosharecodesa" // Must be globally unique
   resource_group_name      = azurerm_resource_group.resource_group.name
   location                 = azurerm_resource_group.resource_group.location
   account_tier             = "Standard"
@@ -26,7 +26,7 @@ resource "azurerm_storage_account" "code_storage_account" {
 
 # Storage account used for storing application's state
 resource "azurerm_storage_account" "db_storage_account" {
-  name                     = "dogornotdbsa"
+  name                     = "doggosharedbsa" // Must be globally unique
   resource_group_name      = azurerm_resource_group.resource_group.name
   location                 = azurerm_resource_group.resource_group.location
   account_tier             = "Standard"
@@ -95,8 +95,8 @@ resource "azurerm_storage_container" "photos" {
   container_access_type = "private"
 }
 
-resource "azurerm_linux_function_app" "dog-or-not-app" {
-  name                      = "dog-or-not"
+resource "azurerm_linux_function_app" "doggo-share-app" {
+  name                      = "doggo-share" // Must be globally unique
   location                  = azurerm_resource_group.resource_group.location
   resource_group_name       = azurerm_resource_group.resource_group.name
   service_plan_id       =     azurerm_service_plan.service_plan.id
@@ -114,5 +114,15 @@ resource "azurerm_linux_function_app" "dog-or-not-app" {
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = false
     CONNSTRING = azurerm_storage_account.db_storage_account.primary_connection_string
     TABLE = azurerm_storage_table.photo_info_table.name
+    VISION_ENDPOINT = azurerm_cognitive_account.compvis.endpoint
+    VISION_KEY = azurerm_cognitive_account.compvis.primary_access_key
   }
+}
+
+resource "azurerm_cognitive_account" "compvis" {
+  name                = "doggosharecompvis" // Must be globally unique
+  resource_group_name = azurerm_resource_group.resource_group.name
+  location            = azurerm_resource_group.resource_group.location
+  sku_name            = "F0"
+  kind                = "ComputerVision"
 }
