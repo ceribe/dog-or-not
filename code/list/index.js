@@ -1,13 +1,11 @@
 const AzureTables = require("@azure/data-tables");
 
 module.exports = async function (context, req) {
-  context.log("JavaScript HTTP trigger function processed a request.");
-
   const client = AzureTables.TableClient.fromConnectionString(
     process.env.CONNSTRING,
     process.env.PHOTO_TABLE
   );
-  let responseMessage = "Connected to " + process.env.TABLE;
+  let responseMessage = "Photos";
 
   // const testEntity = {
   //     partitionKey: "P1",

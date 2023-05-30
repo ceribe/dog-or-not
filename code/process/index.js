@@ -11,7 +11,7 @@ module.exports = async function (context, myBlob) {
 
   const client = AzureTables.TableClient.fromConnectionString(
     process.env.CONNSTRING,
-    process.env.TABLE
+    process.env.PHOTO_TABLE
   );
 
   const uniqueName = fileName + Math.random().toString(36).substring(2, 5);
@@ -20,7 +20,7 @@ module.exports = async function (context, myBlob) {
   const isDog = await analyzePicture(context, myBlob);
   await updateStatus(context, client, uniqueName, isDog ? "dog" : "not dog");
   if (isDog)
-    triggerSendEmailFunction(link);
+    await triggerSendEmailFunction(link, context);
 };
 
 async function saveToTable(context, client, fileName, link, uniqueName) {
@@ -75,7 +75,7 @@ async function updateStatus(context, client, uniqueName, status) {
   });
 }
 
-async function triggerSendEmailFunction(link) {
+async function triggerSendEmailFunction(link, context) {
   const queueServiceClient = QueueServiceClient.fromConnectionString(
     process.env.CONNSTRING
   );
@@ -84,5 +84,16 @@ async function triggerSendEmailFunction(link) {
     process.env.QUEUE_NAME
   );
 
-  await queueClient.sendMessage(link);
+  const object = {
+    link: link,
+  };
+
+  context.log("Sending message to queue: " + JSON.stringify(object));
+  const sendMessageResponse = await queueClient.sendMessage(
+    Buffer.from(JSON.stringify(object)).toString("base64")
+  )
+
+  context.log(
+    `Sent message successfully, service assigned message Id: ${sendMessageResponse.messageId}, service assigned request Id: ${sendMessageResponse.requestId}`
+  );
 }
