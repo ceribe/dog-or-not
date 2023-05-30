@@ -1,4 +1,5 @@
 const AzureTables = require("@azure/data-tables");
+const { QueueClient, QueueServiceClient } = require("@azure/storage-queue");
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 const {
   ComputerVisionClient,
@@ -18,7 +19,8 @@ module.exports = async function (context, myBlob) {
   await saveToTable(context, client, fileName, link, uniqueName);
   const isDog = await analyzePicture(context, myBlob);
   await updateStatus(context, client, uniqueName, isDog ? "dog" : "not dog");
-  // Trigger cloud function that will send an email
+  if (isDog)
+    triggerSendEmailFunction(link);
 };
 
 async function saveToTable(context, client, fileName, link, uniqueName) {
@@ -71,4 +73,16 @@ async function updateStatus(context, client, uniqueName, status) {
   await client.updateEntity(entity).catch((err) => {
     context.log("error updating entity: " + err);
   });
+}
+
+async function triggerSendEmailFunction(link) {
+  const queueServiceClient = QueueServiceClient.fromConnectionString(
+    process.env.CONNSTRING
+  );
+
+  const queueClient = queueServiceClient.getQueueClient(
+    process.env.QUEUE_NAME
+  );
+
+  await queueClient.sendMessage(link);
 }

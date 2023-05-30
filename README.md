@@ -5,7 +5,7 @@
   <img src="pictures/dog_2.jpg" width="375">
 </p>
 
-Doggo Share is a cloud application that allows you to share your dog pictures with the world. It is built using Azure Functions, Azure Storage and Azure Cognitive Services.
+Doggo Share is a cloud application that allows you to share your dog pictures with the world. It is built using Azure Functions, Azure Storage, Azure Cognitive Services and Azure Email Communication Service.
 Register on the website using an email to receive all future dog photos. Upload your picture on the website and it will be automatically analyzed by Azure Cognitive Services to determine whether there is a dog in the picture or not. The picture will be stored in Azure Storage and if there is a dog in the picture, a link to the picture will be sent to all registered users. Additionally, on the website you can see all the pictures that were uploaded by other users along with the dog detection results and a link to the picture.
 
 ## Project Initialization
@@ -53,6 +53,20 @@ vim ui/index.js
 
 ### Upload website to Azure Storage
 Go to doggosharecodesa storage account in Azure. Click on "Static website" and enable it. Set index document name to "index.html" and error document path to "index.html". Click "Save". Click on "Browse" and upload the files from "ui/dist" folder.
+
+### Add Domain to "email-doggosharecommservice"
+Currently it's not possible to achieve that via Terraform so it needs to be set up manually.
+Go to "email-doggosharecommservice" resource in Azure. 
+Click on "Provision domains" and then on "1-click add".
+
+### Connect email domain to "doggosharecommservice"
+Go to "doggosharecommservice" resource in Azure.
+Click on "Domains" and then on "Connect domain".
+Select the domain that was added in the previous step and click "Connect".
+
+### Update domain name in code/send_emails/index.js
+Change the domain of senderEmail to the previously added domain.
+For example if the domain name is "1234.azurecomm.net" then the senderEmail should be "DoNotReply@1234.azurecomm.net".
 
 ### Publish cloud functions
 ```bash

@@ -1,0 +1,12 @@
+{
+  "disabled": false,
+  "bindings": [
+      {
+          "type": "queueTrigger",
+          "direction": "in",
+          "name": "myQueueItem",
+          "queueName": "sendmailqueue",
+          "connection":"CONNSTRING"
+      }
+  ]
+}

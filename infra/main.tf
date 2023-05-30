@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "3.58.0"
+    }
+  }
+}
+
 provider "azurerm" {
   features {}
 }
@@ -40,7 +49,7 @@ resource "azurerm_storage_account" "db_storage_account" {
       exposed_headers = ["*"]
       max_age_in_seconds = 86400
     }
-  }
+  } 
 }
 
 data "azurerm_storage_account_sas" "db_storage_account_sas" {
@@ -89,6 +98,12 @@ resource "azurerm_storage_table" "photo_info_table" {
   storage_account_name = azurerm_storage_account.db_storage_account.name
 }
 
+# Table storing photo's names, references and status
+resource "azurerm_storage_table" "registered_users_table" {
+  name                 = "registeredusers"
+  storage_account_name = azurerm_storage_account.db_storage_account.name
+}
+
 # Container used to store uploaded photos. write is private but read is public
 resource "azurerm_storage_container" "photos" {
   name                  = "photos"
@@ -114,9 +129,12 @@ resource "azurerm_linux_function_app" "doggo-share-app" {
     FUNCTIONS_WORKER_RUNTIME = "node"
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = false
     CONNSTRING = azurerm_storage_account.db_storage_account.primary_connection_string
-    TABLE = azurerm_storage_table.photo_info_table.name
+    PHOTO_TABLE = azurerm_storage_table.photo_info_table.name
+    USERS_TABLE = azurerm_storage_table.registered_users_table.name
     VISION_ENDPOINT = azurerm_cognitive_account.compvis.endpoint
     VISION_KEY = azurerm_cognitive_account.compvis.primary_access_key
+    COMMUNICATION_SERVICE_CONNECTION_STRING = azurerm_communication_service.doggo_share_communication_service.primary_connection_string
+    QUEUE_NAME = azurerm_storage_queue.doggo_share_queue.name
   }
 }
 
@@ -126,4 +144,21 @@ resource "azurerm_cognitive_account" "compvis" {
   location            = azurerm_resource_group.resource_group.location
   sku_name            = "F0"
   kind                = "ComputerVision"
+}
+
+resource "azurerm_communication_service" "doggo_share_communication_service" {
+  name                = "doggosharecommservice" // Must be globally unique
+  resource_group_name = azurerm_resource_group.resource_group.name
+  data_location       = "Europe"
+}
+
+resource "azurerm_email_communication_service" "doggo_share_communication_email" {
+  name                = "email-doggosharecommservice" // Must be globally unique
+  resource_group_name = azurerm_resource_group.resource_group.name
+  data_location       = "Europe"
+}
+
+resource "azurerm_storage_queue" "doggo_share_queue" {
+  name                 = "sendmailqueue"
+  storage_account_name = azurerm_storage_account.db_storage_account.name
 }

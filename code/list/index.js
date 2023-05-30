@@ -5,7 +5,7 @@ module.exports = async function (context, req) {
 
   const client = AzureTables.TableClient.fromConnectionString(
     process.env.CONNSTRING,
-    process.env.TABLE
+    process.env.PHOTO_TABLE
   );
   let responseMessage = "Connected to " + process.env.TABLE;
 
