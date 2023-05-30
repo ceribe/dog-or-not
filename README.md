@@ -1,8 +1,8 @@
 # Doggo Share
 
 <p float="left">
-  <img src="pictures/dog_1.jpg" width="350">
-  <img src="pictures/dog_2.jpg" width="350">
+  <img src="pictures/dog_1.jpg" width="375">
+  <img src="pictures/dog_2.jpg" width="375">
 </p>
 
 Doggo Share is a cloud application that allows you to share your dog pictures with the world. It is built using Azure Functions, Azure Storage and Azure Cognitive Services.
