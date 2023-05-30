@@ -1,5 +1,10 @@
 # Doggo Share
 
+<p float="left">
+  <img src="pictures/dog_1.jpg" width="350">
+  <img src="pictures/dog_2.jpg" width="350">
+</p>
+
 Doggo Share is a cloud application that allows you to share your dog pictures with the world. It is built using Azure Functions, Azure Storage and Azure Cognitive Services.
 Register on the website using an email to receive all future dog photos. Upload your picture on the website and it will be automatically analyzed by Azure Cognitive Services to determine whether there is a dog in the picture or not. The picture will be stored in Azure Storage and if there is a dog in the picture, a link to the picture will be sent to all registered users. Additionally, on the website you can see all the pictures that were uploaded by other users along with the dog detection results and a link to the picture.
 
