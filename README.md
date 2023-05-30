@@ -56,6 +56,6 @@ Go to doggosharecodesa storage account in Azure. Click on "Static website" and e
 
 ### Publish cloud functions
 ```bash
-func azure functionapp publish doggo-share
+(cd code; func azure functionapp publish doggo-share)
 ```
 

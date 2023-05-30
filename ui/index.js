@@ -5,7 +5,7 @@ const selectButton = document.getElementById("select-button");
 const fileInput = document.getElementById("file-input");
 
 const website = "https://doggosharedbsa.blob.core.windows.net/"
-const sasToken = "?sv=2017-11-09\u0026ss=bqtf\u0026srt=sco\u0026sp=rwac\u0026se=2024-03-21T00:00:00Z\u0026st=2023-03-21T00:00:00Z\u0026spr=https\u0026sig=QkZhuVmi7L076GuA2tP8lHy9nbC3kvZxB7hnRbz%2F8tM%3D";
+const sasToken = "?sv=2017-11-09\u0026ss=bqtf\u0026srt=sco\u0026sp=rwac\u0026se=2024-03-21T00:00:00Z\u0026st=2023-03-21T00:00:00Z\u0026spr=https\u0026sig=kG4ZKywN%2ByUiB5yI68ZK5Qnx1Iwp53CeMZDT%2F3GeCN0%3D";
 const blobSasUrl = website + sasToken;
 const blobServiceClient = new BlobServiceClient(blobSasUrl);
 const containerClient = blobServiceClient.getContainerClient("photos");

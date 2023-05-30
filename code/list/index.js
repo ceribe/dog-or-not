@@ -21,7 +21,7 @@ module.exports = async function (context, req) {
 
   const entitiesIter = client.listEntities();
   for await (const entity of entitiesIter) {
-    responseMessage += "\n" + entity.partitionKey + "-" + entity.rowKey;
+    responseMessage += "\n" + entity.partitionKey + "-" + entity.rowKey + "-" + entity.fileName + "-" + entity.link + "-" + entity.status;
   }
   context.res = {
     // status: 200, /* Defaults to 200 */
