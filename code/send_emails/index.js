@@ -2,6 +2,7 @@ const { EmailClient } = require("@azure/communication-email");
 const AzureTables = require("@azure/data-tables");
 
 module.exports = async function (context, queueItem) {
+  context.log("Sending emails with " + queueItem.link);
   const client = AzureTables.TableClient.fromConnectionString(
     process.env.CONNSTRING,
     process.env.USERS_TABLE
@@ -15,14 +16,14 @@ module.exports = async function (context, queueItem) {
   const connectionString = process.env.COMMUNICATION_SERVICE_CONNECTION_STRING;
   const emailClient = new EmailClient(connectionString);
   const messagesToSend = {
-    senderAddress: "DoNotReply@26c7cf19-7907-42f3-8aa1-7d8b4603cf81.azurecomm.net",
+    senderAddress:
+      "DoNotReply@700c52de-bbed-4ce4-a2de-6089512bc9c5.azurecomm.net",
     content: {
       subject: "Check out this cool doggo!",
       plainText: queueItem.link,
     },
     recipients: {
-      to: 
-      emailList.map((email) => {
+      to: emailList.map((email) => {
         return {
           address: email,
           displayName: email,

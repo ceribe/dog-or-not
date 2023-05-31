@@ -1,0 +1,13 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#padded-div {
+  padding-top: 20px;
+}
+
+#file-table {
+  border: 1px solid black;
+}

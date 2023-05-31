@@ -5,24 +5,17 @@ module.exports = async function (context, req) {
     process.env.CONNSTRING,
     process.env.PHOTO_TABLE
   );
-  let responseMessage = "Photos";
-
-  // const testEntity = {
-  //     partitionKey: "P1",
-  //     rowKey: "R1" + Math.random().toString(36).substring(2, 5),
-  //     foo: "foo",
-  //     bar: 123
-  // };
-  // await client.createEntity(testEntity).catch((err) => {
-  //     context.log("error creating entity: " + err);
-  // });
+  let rows = [];
 
   const entitiesIter = client.listEntities();
   for await (const entity of entitiesIter) {
-    responseMessage += "\n" + entity.partitionKey + "-" + entity.rowKey + "-" + entity.fileName + "-" + entity.link + "-" + entity.status;
+    rows.push({
+      fileName: entity.fileName,
+      link: entity.link,
+      status: entity.status,
+    });
   }
   context.res = {
-    // status: 200, /* Defaults to 200 */
-    body: responseMessage,
+    body: { data: rows },
   };
 };

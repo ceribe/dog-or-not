@@ -1,14 +1,26 @@
 <!DOCTYPE html>
+<head>
+  <title>Doggo Share</title>
+  <link rel="stylesheet" href="./index.css" />
+</head>
 <html>
+  <body>
+    <div>
+      <h1>Doggo Share</h1>
+    </div>
+    <div id="padded-div">
+      <button id="register-button">Register</button>
+      <input type="email" id="email-input" placeholder="Enter email" />
+    </div>
+    <div id="padded-div">
+      <button id="select-button">Select and upload files</button>
+      <input type="file" id="file-input" multiple style="display: none" />
+    </div>
+    <div id="padded-div">Uploaded files:</div>
+    <div id="padded-div">
+      <table id="file-table"></table>
+    </div>
+  </body>
 
-<body>
-    <button id="select-button">Select and upload files</button>
-    <input type="file" id="file-input" multiple style="display: none;" />
-    <button id="refresh-list">Refresh status of uploaded files</button>
-    <!-- <p><b>Status:</b></p>
-    <p id="status" style="height:160px; width: 593px; overflow: scroll;" /> -->
-</body>
-
-<script type="module" src="./index.js"></script>
-
+  <script type="module" src="./index.js"></script>
 </html>

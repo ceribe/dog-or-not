@@ -123,6 +123,9 @@ resource "azurerm_linux_function_app" "doggo-share-app" {
     application_stack {
       node_version = "18"
     }
+    cors {
+      allowed_origins = ["*"]
+    }
   }
 
   app_settings = {

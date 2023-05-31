@@ -61,7 +61,7 @@ vim ui/index.js
 
 ### Upload website to Azure Storage
 
-Go to doggosharecodesa storage account in Azure. Click on "Static website" and enable it. Set index document name to "index.html" and error document path to "index.html". Click "Save". Click on "Browse" and upload the files from "ui/dist" folder.
+Go to doggosharecodesa storage account in Azure. Click on "Static website" and enable it. Set index document name to "index.html" and error document path to "index.html". Click "Save". Upload the files from "ui/dist" folder to $web container.
 
 ### Add Domain to "email-doggosharecommservice"
 

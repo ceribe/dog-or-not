@@ -19,8 +19,7 @@ module.exports = async function (context, myBlob) {
   await saveToTable(context, client, fileName, link, uniqueName);
   const isDog = await analyzePicture(context, myBlob);
   await updateStatus(context, client, uniqueName, isDog ? "dog" : "not dog");
-  if (isDog)
-    await triggerSendEmailFunction(link, context);
+  if (isDog) await triggerSendEmailFunction(link, context);
 };
 
 async function saveToTable(context, client, fileName, link, uniqueName) {
@@ -42,9 +41,9 @@ async function analyzePicture(context, blob) {
   const client = new ComputerVisionClient(
     credentials,
     process.env.VISION_ENDPOINT
-    );
-    let isDog = false;
-    await client
+  );
+  let isDog = false;
+  await client
     .analyzeImageInStream(blob, { visualFeatures: ["Categories"] })
     .then((result) => {
       context.log(result);
@@ -52,15 +51,14 @@ async function analyzePicture(context, blob) {
         isDog = result.categories.some((category) => {
           return category.name === "animal_dog";
         });
-      }
-      catch (err) {
+      } catch (err) {
         context.log(err);
       }
     })
     .catch((err) => {
       context.log(err);
     });
-    return isDog;
+  return isDog;
 }
 
 async function updateStatus(context, client, uniqueName, status) {
@@ -80,9 +78,7 @@ async function triggerSendEmailFunction(link, context) {
     process.env.CONNSTRING
   );
 
-  const queueClient = queueServiceClient.getQueueClient(
-    process.env.QUEUE_NAME
-  );
+  const queueClient = queueServiceClient.getQueueClient(process.env.QUEUE_NAME);
 
   const object = {
     link: link,
@@ -91,7 +87,7 @@ async function triggerSendEmailFunction(link, context) {
   context.log("Sending message to queue: " + JSON.stringify(object));
   const sendMessageResponse = await queueClient.sendMessage(
     Buffer.from(JSON.stringify(object)).toString("base64")
-  )
+  );
 
   context.log(
     `Sent message successfully, service assigned message Id: ${sendMessageResponse.messageId}, service assigned request Id: ${sendMessageResponse.requestId}`
